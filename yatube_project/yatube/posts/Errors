@@ -1,0 +1,1250 @@
+(venv) (base) MacBook-Pro-Vaceslav:hw03_forms vaceslavmorgunov$ pytest
+===================================================================== test session starts =====================================================================
+platform darwin -- Python 3.8.3, pytest-5.3.5, py-1.8.1, pluggy-0.13.1 -- /Users/vaceslavmorgunov/Dev/hw03_forms/venv/bin/python3
+django: settings: yatube.settings (from ini)
+rootdir: /Users/vaceslavmorgunov/Dev/hw03_forms, inifile: pytest.ini, testpaths: tests/
+plugins: Faker-11.3.0, django-3.8.0, pythonpath-0.7.3
+collected 20 items                                                                                                                                            
+
+tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_view_get PASSED                                                                   [  5%]
+tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_not_in_context_view PASSED                                                        [ 10%]
+tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_not_in_view_context PASSED                                                        [ 15%]
+tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_view PASSED                                                                       [ 20%]
+tests/test_paginator.py::TestGroupPaginatorView::test_profile_paginator_view PASSED                                                                     [ 25%]
+tests/test_about.py::TestTemplateView::test_about_author_tech PASSED                                                                                    [ 30%]
+tests/test_auth_urls.py::TestAuthUrls::test_auth_urls FAILED                                                                                                      [ 35%]
+tests/test_create.py::TestCreateView::test_create_view_get FAILED                                                                                                 [ 40%]
+tests/test_create.py::TestCreateView::test_create_view_post FAILED                                                                                                [ 45%]
+tests/test_homework.py::TestPost::test_post_create PASSED                                                                                                         [ 50%]
+tests/test_homework.py::TestGroup::test_group_create PASSED                                                                                                       [ 55%]
+tests/test_homework.py::TestGroupView::test_group_view PASSED                                                                                                     [ 60%]
+tests/test_post.py::TestPostView::test_post_view_get FAILED                                                                                                       [ 65%]
+tests/test_post.py::TestPostEditView::test_post_edit_view_get PASSED                                                                                              [ 70%]
+tests/test_post.py::TestPostEditView::test_post_edit_view_author_get FAILED                                                                                       [ 75%]
+tests/test_post.py::TestPostEditView::test_post_edit_view_author_post FAILED                                                                                      [ 80%]
+tests/test_profile.py::TestProfileView::test_profile_view_get FAILED                                                                                              [ 85%]
+tests/test_homework.py::TestPost::test_post_model PASSED                                                                                                          [ 90%]
+tests/test_homework.py::TestPost::test_post_admin PASSED                                                                                                          [ 95%]
+tests/test_homework.py::TestGroup::test_group_model PASSED                                                                                                        [100%]
+
+=============================================================================== FAILURES ================================================================================
+______________________________________________________________________ TestAuthUrls.test_auth_urls ______________________________________________________________________
+
+self = <tests.test_auth_urls.TestAuthUrls object at 0x10e818370>, client = <django.test.client.Client object at 0x10e832cd0>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_auth_urls(self, client):
+        urls = ['/auth/login/', '/auth/logout/', '/auth/signup/']
+        for url in urls:
+            try:
+>               response = client.get(url)
+
+tests/test_auth_urls.py:11: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.Client object at 0x10e832cd0>, path = '/auth/login/', data = None, follow = False, secure = False, extra = {}
+
+    def get(self, path, data=None, follow=False, secure=False, **extra):
+        """Request a response from the server using GET."""
+>       response = super().get(path, data=data, secure=secure, **extra)
+
+venv/lib/python3.8/site-packages/django/test/client.py:535: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.Client object at 0x10e832cd0>, path = '/auth/login/', data = {}, secure = False, extra = {}
+
+    def get(self, path, data=None, secure=False, **extra):
+        """Construct a GET request."""
+        data = {} if data is None else data
+>       return self.generic('GET', path, secure=secure, **{
+            'QUERY_STRING': urlencode(data, doseq=True),
+            **extra,
+        })
+
+venv/lib/python3.8/site-packages/django/test/client.py:345: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.Client object at 0x10e832cd0>, method = 'GET', path = '/auth/login/', data = b'', content_type = 'application/octet-stream', secure = False
+extra = {'QUERY_STRING': ''}, parsed = ParseResult(scheme='', netloc='', path='/auth/login/', params='', query='', fragment='')
+r = {'PATH_INFO': '/auth/login/', 'QUERY_STRING': '', 'REQUEST_METHOD': 'GET', 'SERVER_PORT': '80', ...}, query_string = ''
+
+    def generic(self, method, path, data='',
+                content_type='application/octet-stream', secure=False,
+                **extra):
+        """Construct an arbitrary HTTP request."""
+        parsed = urlparse(str(path))  # path can be lazy
+        data = force_bytes(data, settings.DEFAULT_CHARSET)
+        r = {
+            'PATH_INFO': self._get_path(parsed),
+            'REQUEST_METHOD': method,
+            'SERVER_PORT': '443' if secure else '80',
+            'wsgi.url_scheme': 'https' if secure else 'http',
+        }
+        if data:
+            r.update({
+                'CONTENT_LENGTH': str(len(data)),
+                'CONTENT_TYPE': content_type,
+                'wsgi.input': FakePayload(data),
+            })
+        r.update(extra)
+        # If QUERY_STRING is absent or empty, we want to extract it from the URL.
+        if not r.get('QUERY_STRING'):
+            # WSGI requires latin-1 encoded strings. See get_path_info().
+            query_string = parsed[4].encode().decode('iso-8859-1')
+            r['QUERY_STRING'] = query_string
+>       return self.request(**r)
+
+venv/lib/python3.8/site-packages/django/test/client.py:422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.Client object at 0x10e832cd0>, request = {'PATH_INFO': '/auth/login/', 'QUERY_STRING': '', 'REQUEST_METHOD': 'GET', 'SERVER_PORT': '80', ...}
+environ = {'CSRF_COOKIE': 'yqsGqBao3YEF4UCTuftdASXYlkO6POfr3zPirtFlh6BfY8XBqitA3PUww27Cdiyq', 'CSRF_COOKIE_USED': True, 'HTTP_COOKIE': '', 'PATH_INFO': '/auth/login/', ...}
+data = {'context': [[{'True': True, 'False': False, 'None': None}, {'csrf_token': <SimpleLazyObject: 'sB5ZviWy5v8IEjpBM984lsA...0>, <django.template.base.Template object at 0x10e8dd550>, <django.template.base.Template object at 0x10e8df5b0>, ...]}
+on_template_render = functools.partial(<function store_rendered_templates at 0x10dde2310>, {'templates': [<django.template.base.Template ob...          )'], 'context_line': '        raise NoReverseMatch(msg)', 'post_context': [], 'pre_context_lineno': 666}}]]})
+signal_uid = 'template-render-4538180736', exception_uid = 'request-exception-4538180736', response = <HttpResponseServerError status_code=500, "text/html">
+
+    def request(self, **request):
+        """
+        The master request method. Compose the environment dictionary and pass
+        to the handler, return the result of the handler. Assume defaults for
+        the query environment, which can be overridden using the arguments to
+        the request.
+        """
+        environ = self._base_environ(**request)
+    
+        # Curry a data dictionary into an instance of the template renderer
+        # callback function.
+        data = {}
+        on_template_render = partial(store_rendered_templates, data)
+        signal_uid = "template-render-%s" % id(request)
+        signals.template_rendered.connect(on_template_render, dispatch_uid=signal_uid)
+        # Capture exceptions created by the handler.
+        exception_uid = "request-exception-%s" % id(request)
+        got_request_exception.connect(self.store_exc_info, dispatch_uid=exception_uid)
+        try:
+            try:
+                response = self.handler(environ)
+            except TemplateDoesNotExist as e:
+                # If the view raises an exception, Django will attempt to show
+                # the 500.html template. If that template is not available,
+                # we should ignore the error in favor of re-raising the
+                # underlying exception that caused the 500 error. Any other
+                # template found to be missing during view error handling
+                # should be reported as-is.
+                if e.args != ('500.html',):
+                    raise
+    
+            # Look for a signalled exception, clear the current context
+            # exception data, then re-raise the signalled exception.
+            # Also make sure that the signalled exception is cleared from
+            # the local cache!
+            if self.exc_info:
+                _, exc_value, _ = self.exc_info
+                self.exc_info = None
+>               raise exc_value
+
+venv/lib/python3.8/site-packages/django/test/client.py:503: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = <WSGIRequest: GET '/auth/login/'>
+
+    @wraps(get_response)
+    def inner(request):
+        try:
+>           response = get_response(request)
+
+venv/lib/python3.8/site-packages/django/core/handlers/exception.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.ClientHandler object at 0x10e832b50>, request = <WSGIRequest: GET '/auth/login/'>
+
+    def _get_response(self, request):
+        """
+        Resolve and call the view, then apply view, exception, and
+        template_response middleware. This method is everything that happens
+        inside the request/response middleware.
+        """
+        response = None
+    
+        if hasattr(request, 'urlconf'):
+            urlconf = request.urlconf
+            set_urlconf(urlconf)
+            resolver = get_resolver(urlconf)
+        else:
+            resolver = get_resolver()
+    
+        resolver_match = resolver.resolve(request.path_info)
+        callback, callback_args, callback_kwargs = resolver_match
+        request.resolver_match = resolver_match
+    
+        # Apply view middleware
+        for middleware_method in self._view_middleware:
+            response = middleware_method(request, callback, callback_args, callback_kwargs)
+            if response:
+                break
+    
+        if response is None:
+            wrapped_callback = self.make_view_atomic(callback)
+            try:
+                response = wrapped_callback(request, *callback_args, **callback_kwargs)
+            except Exception as e:
+                response = self.process_exception_by_middleware(e, request)
+    
+        # Complain if the view returned None (a common error).
+        if response is None:
+            if isinstance(callback, types.FunctionType):    # FBV
+                view_name = callback.__name__
+            else:                                           # CBV
+                view_name = callback.__class__.__name__ + '.__call__'
+    
+            raise ValueError(
+                "The view %s.%s didn't return an HttpResponse object. It "
+                "returned None instead." % (callback.__module__, view_name)
+            )
+    
+        # If the response supports deferred rendering, apply template
+        # response middleware and then render the response
+        elif hasattr(response, 'render') and callable(response.render):
+            for middleware_method in self._template_response_middleware:
+                response = middleware_method(request, response)
+                # Complain if the template response middleware returned None (a common error).
+                if response is None:
+                    raise ValueError(
+                        "%s.process_template_response didn't return an "
+                        "HttpResponse object. It returned None instead."
+                        % (middleware_method.__self__.__class__.__name__)
+                    )
+    
+            try:
+                response = response.render()
+            except Exception as e:
+>               response = self.process_exception_by_middleware(e, request)
+
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.test.client.ClientHandler object at 0x10e832b50>, request = <WSGIRequest: GET '/auth/login/'>
+
+    def _get_response(self, request):
+        """
+        Resolve and call the view, then apply view, exception, and
+        template_response middleware. This method is everything that happens
+        inside the request/response middleware.
+        """
+        response = None
+    
+        if hasattr(request, 'urlconf'):
+            urlconf = request.urlconf
+            set_urlconf(urlconf)
+            resolver = get_resolver(urlconf)
+        else:
+            resolver = get_resolver()
+    
+        resolver_match = resolver.resolve(request.path_info)
+        callback, callback_args, callback_kwargs = resolver_match
+        request.resolver_match = resolver_match
+    
+        # Apply view middleware
+        for middleware_method in self._view_middleware:
+            response = middleware_method(request, callback, callback_args, callback_kwargs)
+            if response:
+                break
+    
+        if response is None:
+            wrapped_callback = self.make_view_atomic(callback)
+            try:
+                response = wrapped_callback(request, *callback_args, **callback_kwargs)
+            except Exception as e:
+                response = self.process_exception_by_middleware(e, request)
+    
+        # Complain if the view returned None (a common error).
+        if response is None:
+            if isinstance(callback, types.FunctionType):    # FBV
+                view_name = callback.__name__
+            else:                                           # CBV
+                view_name = callback.__class__.__name__ + '.__call__'
+    
+            raise ValueError(
+                "The view %s.%s didn't return an HttpResponse object. It "
+                "returned None instead." % (callback.__module__, view_name)
+            )
+    
+        # If the response supports deferred rendering, apply template
+        # response middleware and then render the response
+        elif hasattr(response, 'render') and callable(response.render):
+            for middleware_method in self._template_response_middleware:
+                response = middleware_method(request, response)
+                # Complain if the template response middleware returned None (a common error).
+                if response is None:
+                    raise ValueError(
+                        "%s.process_template_response didn't return an "
+                        "HttpResponse object. It returned None instead."
+                        % (middleware_method.__self__.__class__.__name__)
+                    )
+    
+            try:
+>               response = response.render()
+
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:143: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <TemplateResponse status_code=200, "text/html; charset=utf-8">
+
+    def render(self):
+        """Render (thereby finalizing) the content of the response.
+    
+        If the content has already been rendered, this is a no-op.
+    
+        Return the baked response instance.
+        """
+        retval = self
+        if not self._is_rendered:
+>           self.content = self.rendered_content
+
+venv/lib/python3.8/site-packages/django/template/response.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <TemplateResponse status_code=200, "text/html; charset=utf-8">
+
+    @property
+    def rendered_content(self):
+        """Return the freshly rendered content for the template and context
+        described by the TemplateResponse.
+    
+        This *does not* set the final content of the response. To set the
+        response content, you must either call render(), or set the
+        content explicitly using the value of this property.
+        """
+        template = self.resolve_template(self.template_name)
+        context = self.resolve_context(self.context_data)
+>       content = template.render(context, self._request)
+
+venv/lib/python3.8/site-packages/django/template/response.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.backends.django.Template object at 0x10e85b4c0>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+request = <WSGIRequest: GET '/auth/login/'>
+
+    def render(self, context=None, request=None):
+        context = make_context(context, request, autoescape=self.backend.engine.autoescape)
+        try:
+>           return self.template.render(context)
+
+venv/lib/python3.8/site-packages/django/template/backends/django.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.base.Template object at 0x10e83f640>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        "Display stage -- can be called many times"
+        with context.render_context.push_state(self):
+            if context.template is None:
+                with context.bind_template(self):
+                    context.template_name = self.name
+>                   return self._render(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.base.Template object at 0x10e83f640>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def instrumented_test_render(self, context):
+        """
+        An instrumented Template render method, providing a signal that can be
+        intercepted by the test Client.
+        """
+        template_rendered.send(sender=self, template=self, context=context)
+>       return self.nodelist.render(context)
+
+venv/lib/python3.8/site-packages/django/test/utils.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = [<TextNode: '# templates/users/login.h'>, <ExtendsNode: extends "base.html">]
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        bits = []
+        for node in self:
+            if isinstance(node, Node):
+>               bit = node.render_annotated(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:937: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <ExtendsNode: extends "base.html">
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render_annotated(self, context):
+        """
+        Render the node. If debug is True and an exception occurs during
+        rendering, the exception is annotated with contextual line information
+        where it occurred in the template. For internal usage this method is
+        preferred over using the render method directly.
+        """
+        try:
+>           return self.render(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:904: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <ExtendsNode: extends "base.html">
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        compiled_parent = self.get_parent(context)
+    
+        if BLOCK_CONTEXT_KEY not in context.render_context:
+            context.render_context[BLOCK_CONTEXT_KEY] = BlockContext()
+        block_context = context.render_context[BLOCK_CONTEXT_KEY]
+    
+        # Add the block nodes from this node to the block context
+        block_context.add_blocks(self.blocks)
+    
+        # If this block's parent doesn't have an extends node it is the root,
+        # and its block nodes also need to be added to the block context.
+        for node in compiled_parent.nodelist:
+            # The ExtendsNode has to be the first non-text node.
+            if not isinstance(node, TextNode):
+                if not isinstance(node, ExtendsNode):
+                    blocks = {n.name: n for n in
+                              compiled_parent.nodelist.get_nodes_by_type(BlockNode)}
+                    block_context.add_blocks(blocks)
+                break
+    
+        # Call Template._render explicitly so the parser context stays
+        # the same.
+        with context.render_context.push_state(compiled_parent, isolated_context=False):
+>           return compiled_parent._render(context)
+
+venv/lib/python3.8/site-packages/django/template/loader_tags.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.base.Template object at 0x10e783fd0>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def instrumented_test_render(self, context):
+        """
+        An instrumented Template render method, providing a signal that can be
+        intercepted by the test Client.
+        """
+        template_rendered.send(sender=self, template=self, context=context)
+>       return self.nodelist.render(context)
+
+venv/lib/python3.8/site-packages/django/test/utils.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = [<django.template.defaulttags.LoadNode object at 0x10e060d90>, <TextNode: '\n<!-- templates/base.html'>, <django.templ...footer>'>, <django.template.loader_tags.IncludeNode object at 0x10e78eb20>, <TextNode: '\n    </footer>\n  </body>\n'>]
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        bits = []
+        for node in self:
+            if isinstance(node, Node):
+>               bit = node.render_annotated(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:937: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Block Node: content. Contents: [<TextNode: '\n        Контент ю не под'>]>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render_annotated(self, context):
+        """
+        Render the node. If debug is True and an exception occurs during
+        rendering, the exception is annotated with contextual line information
+        where it occurred in the template. For internal usage this method is
+        preferred over using the render method directly.
+        """
+        try:
+>           return self.render(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:904: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <Block Node: content. Contents: [<TextNode: '\n        Контент ю не под'>]>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        block_context = context.render_context.get(BLOCK_CONTEXT_KEY)
+        with context.push():
+            if block_context is None:
+                context['block'] = self
+                result = self.nodelist.render(context)
+            else:
+                push = block = block_context.pop(self.name)
+                if block is None:
+                    block = self
+                # Create new block so we can store context without thread-safety issues.
+                block = type(self)(block.name, block.nodelist)
+                block.context = context
+                context['block'] = block
+>               result = block.nodelist.render(context)
+
+venv/lib/python3.8/site-packages/django/template/loader_tags.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = [<TextNode: '\n'>, <django.template.defaulttags.LoadNode object at 0x10e85b550>, <TextNode: '\n  <div class="row justi...div class="co'>, <django.template.defaulttags.URLNode object at 0x10e85f400>, <TextNode: '" class="btn btn-link">\n '>]
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        bits = []
+        for node in self:
+            if isinstance(node, Node):
+>               bit = node.render_annotated(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:937: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.defaulttags.URLNode object at 0x10e85f400>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render_annotated(self, context):
+        """
+        Render the node. If debug is True and an exception occurs during
+        rendering, the exception is annotated with contextual line information
+        where it occurred in the template. For internal usage this method is
+        preferred over using the render method directly.
+        """
+        try:
+>           return self.render(context)
+
+venv/lib/python3.8/site-packages/django/template/base.py:904: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <django.template.defaulttags.URLNode object at 0x10e85f400>
+context = [{'True': True, 'False': False, 'None': None}, {}, {}, {'form': <AuthenticationForm bound=False, valid=False, fields=(...80>, 'next': '', 'site': <django.contrib.sites.requests.RequestSite object at 0x10e83f1f0>, 'site_name': 'testserver'}]
+
+    def render(self, context):
+        from django.urls import reverse, NoReverseMatch
+        args = [arg.resolve(context) for arg in self.args]
+        kwargs = {k: v.resolve(context) for k, v in self.kwargs.items()}
+        view_name = self.view_name.resolve(context)
+        try:
+            current_app = context.request.current_app
+        except AttributeError:
+            try:
+                current_app = context.request.resolver_match.namespace
+            except AttributeError:
+                current_app = None
+        # Try to look up the URL. If it fails, raise NoReverseMatch unless the
+        # {% url ... as var %} construct is used, in which case return nothing.
+        url = ''
+        try:
+>           url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+
+venv/lib/python3.8/site-packages/django/template/defaulttags.py:443: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+viewname = 'users:password_reset_form', urlconf = 'yatube.urls', args = [], kwargs = {}, current_app = 'users'
+
+    def reverse(viewname, urlconf=None, args=None, kwargs=None, current_app=None):
+        if urlconf is None:
+            urlconf = get_urlconf()
+        resolver = get_resolver(urlconf)
+        args = args or []
+        kwargs = kwargs or {}
+    
+        prefix = get_script_prefix()
+    
+        if not isinstance(viewname, str):
+            view = viewname
+        else:
+            parts = viewname.split(':')
+            parts.reverse()
+            view = parts[0]
+            path = parts[1:]
+    
+            if current_app:
+                current_path = current_app.split(':')
+                current_path.reverse()
+            else:
+                current_path = None
+    
+            resolved_path = []
+            ns_pattern = ''
+            ns_converters = {}
+            while path:
+                ns = path.pop()
+                current_ns = current_path.pop() if current_path else None
+                # Lookup the name to see if it could be an app identifier.
+                try:
+                    app_list = resolver.app_dict[ns]
+                    # Yes! Path part matches an app in the current Resolver.
+                    if current_ns and current_ns in app_list:
+                        # If we are reversing for a particular app, use that
+                        # namespace.
+                        ns = current_ns
+                    elif ns not in app_list:
+                        # The name isn't shared by one of the instances (i.e.,
+                        # the default) so pick the first instance as the default.
+                        ns = app_list[0]
+                except KeyError:
+                    pass
+    
+                if ns != current_ns:
+                    current_path = None
+    
+                try:
+                    extra, resolver = resolver.namespace_dict[ns]
+                    resolved_path.append(ns)
+                    ns_pattern = ns_pattern + extra
+                    ns_converters.update(resolver.pattern.converters)
+                except KeyError as key:
+                    if resolved_path:
+                        raise NoReverseMatch(
+                            "%s is not a registered namespace inside '%s'" %
+                            (key, ':'.join(resolved_path))
+                        )
+                    else:
+                        raise NoReverseMatch("%s is not a registered namespace" % key)
+            if ns_pattern:
+                resolver = get_ns_resolver(ns_pattern, resolver, tuple(ns_converters.items()))
+    
+>       return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+
+venv/lib/python3.8/site-packages/django/urls/base.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <URLResolver <URLResolver list> (None:None) '^/'>, lookup_view = 'password_reset_form', _prefix = '/', args = (), kwargs = {}, possibilities = []
+
+    def _reverse_with_prefix(self, lookup_view, _prefix, *args, **kwargs):
+        if args and kwargs:
+            raise ValueError("Don't mix *args and **kwargs in call to reverse()!")
+    
+        if not self._populated:
+            self._populate()
+    
+        possibilities = self.reverse_dict.getlist(lookup_view)
+    
+        for possibility, pattern, defaults, converters in possibilities:
+            for result, params in possibility:
+                if args:
+                    if len(args) != len(params):
+                        continue
+                    candidate_subs = dict(zip(params, args))
+                else:
+                    if set(kwargs).symmetric_difference(params).difference(defaults):
+                        continue
+                    if any(kwargs.get(k, v) != v for k, v in defaults.items()):
+                        continue
+                    candidate_subs = kwargs
+                # Convert the candidate subs to text using Converter.to_url().
+                text_candidate_subs = {}
+                for k, v in candidate_subs.items():
+                    if k in converters:
+                        text_candidate_subs[k] = converters[k].to_url(v)
+                    else:
+                        text_candidate_subs[k] = str(v)
+                # WSGI provides decoded URLs, without %xx escapes, and the URL
+                # resolver operates on such URLs. First substitute arguments
+                # without quoting to build a decoded URL and look for a match.
+                # Then, if we have a match, redo the substitution with quoted
+                # arguments in order to return a properly encoded URL.
+                candidate_pat = _prefix.replace('%', '%%') + result
+                if re.search('^%s%s' % (re.escape(_prefix), pattern), candidate_pat % text_candidate_subs):
+                    # safe characters from `pchar` definition of RFC 3986
+                    url = quote(candidate_pat % text_candidate_subs, safe=RFC3986_SUBDELIMS + '/~:@')
+                    # Don't allow construction of scheme relative urls.
+                    return escape_leading_slashes(url)
+        # lookup_view can be URL name or callable, but callables are not
+        # friendly in error messages.
+        m = getattr(lookup_view, '__module__', None)
+        n = getattr(lookup_view, '__name__', None)
+        if m is not None and n is not None:
+            lookup_view_s = "%s.%s" % (m, n)
+        else:
+            lookup_view_s = lookup_view
+    
+        patterns = [pattern for (_, pattern, _, _) in possibilities]
+        if patterns:
+            if args:
+                arg_msg = "arguments '%s'" % (args,)
+            elif kwargs:
+                arg_msg = "keyword arguments '%s'" % (kwargs,)
+            else:
+                arg_msg = "no arguments"
+            msg = (
+                "Reverse for '%s' with %s not found. %d pattern(s) tried: %s" %
+                (lookup_view_s, arg_msg, len(patterns), patterns)
+            )
+        else:
+            msg = (
+                "Reverse for '%(view)s' not found. '%(view)s' is not "
+                "a valid view function or pattern name." % {'view': lookup_view_s}
+            )
+>       raise NoReverseMatch(msg)
+E       django.urls.exceptions.NoReverseMatch: Reverse for 'password_reset_form' not found. 'password_reset_form' is not a valid view function or pattern name.
+
+venv/lib/python3.8/site-packages/django/urls/resolvers.py:673: NoReverseMatch
+
+During handling of the above exception, another exception occurred:
+
+self = <tests.test_auth_urls.TestAuthUrls object at 0x10e818370>, client = <django.test.client.Client object at 0x10e832cd0>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_auth_urls(self, client):
+        urls = ['/auth/login/', '/auth/logout/', '/auth/signup/']
+        for url in urls:
+            try:
+                response = client.get(url)
+            except Exception as e:
+>               assert False, f'''Страница `{url}` работает неправильно. Ошибка: `{e}`'''
+E               AssertionError: Страница `/auth/login/` работает неправильно. Ошибка: `Reverse for 'password_reset_form' not found. 'password_reset_form' is not a valid view function or pattern name.`
+E               assert False
+
+tests/test_auth_urls.py:13: AssertionError
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+ERROR    django.request:log.py:222 Internal Server Error: /auth/login/
+Traceback (most recent call last):
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 145, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 143, in _get_response
+    response = response.render()
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/response.py", line 106, in render
+    self.content = self.rendered_content
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/response.py", line 83, in rendered_content
+    content = template.render(context, self._request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/test/utils.py", line 96, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/test/utils.py", line 96, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 443, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/base.py", line 90, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 673, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'password_reset_form' not found. 'password_reset_form' is not a valid view function or pattern name.
+__________________________________________________________________ TestCreateView.test_create_view_get __________________________________________________________________
+
+self = <tests.test_create.TestCreateView object at 0x10e82e850>, user_client = <django.test.client.Client object at 0x10ebf2220>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_create_view_get(self, user_client):
+        try:
+            response = user_client.get('/create')
+        except Exception as e:
+            assert False, f'''Страница `/create` работает неправильно. Ошибка: `{e}`'''
+        if response.status_code in (301, 302):
+            response = user_client.get('/create/')
+>       assert response.status_code != 404, 'Страница `/create/` не найдена, проверьте этот адрес в *urls.py*'
+E       AssertionError: Страница `/create/` не найдена, проверьте этот адрес в *urls.py*
+E       assert 404 != 404
+E        +  where 404 = <HttpResponseNotFound status_code=404, "text/html">.status_code
+
+tests/test_create.py:16: AssertionError
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+WARNING  django.request:log.py:222 Not Found: /create
+_________________________________________________________________ TestCreateView.test_create_view_post __________________________________________________________________
+
+self = <tests.test_create.TestCreateView object at 0x10eb79e80>, user_client = <django.test.client.Client object at 0x10ea64760>, user = <User: TestUser>
+group = <Group: Тестовая группа 1>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_create_view_post(self, user_client, user, group):
+        text = 'Проверка нового поста!'
+        try:
+            response = user_client.get('/create')
+        except Exception as e:
+            assert False, f'''Страница `/create` работает неправильно. Ошибка: `{e}`'''
+        url = '/create/' if response.status_code in (301, 302) else '/create'
+    
+        response = user_client.post(url, data={'text': text, 'group': group.id})
+    
+>       assert response.status_code in (301, 302), (
+            'Проверьте, что со страницы `/create/` после создания поста, '
+            f'перенаправляете на страницу профиля автора `/profile/{user.username}`'
+        )
+E       AssertionError: Проверьте, что со страницы `/create/` после создания поста, перенаправляете на страницу профиля автора `/profile/TestUser`
+E       assert 404 in (301, 302)
+E        +  where 404 = <HttpResponseNotFound status_code=404, "text/html">.status_code
+
+tests/test_create.py:50: AssertionError
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+WARNING  django.request:log.py:222 Not Found: /create
+WARNING  django.request:log.py:222 Not Found: /create
+____________________________________________________________________ TestPostView.test_post_view_get ____________________________________________________________________
+
+self = <tests.test_post.TestPostView object at 0x10e7ff2b0>, client = <django.test.client.Client object at 0x10ea2b2b0>, post_with_group = <Post: Post object (4)>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_post_view_get(self, client, post_with_group):
+        try:
+            response = client.get(f'/posts/{post_with_group.id}')
+        except Exception as e:
+            assert False, f'''Страница `/posts/<post_id>/` работает неправильно. Ошибка: `{e}`'''
+        if response.status_code in (301, 302):
+>           response = client.get(f'/posts/{post_with_group.id}/')
+
+tests/test_post.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+venv/lib/python3.8/site-packages/django/test/client.py:535: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.8/site-packages/django/test/client.py:345: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.8/site-packages/django/test/client.py:422: in generic
+    return self.request(**r)
+venv/lib/python3.8/site-packages/django/test/client.py:503: in request
+    raise exc_value
+venv/lib/python3.8/site-packages/django/core/handlers/exception.py:34: in inner
+    response = get_response(request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:115: in _get_response
+    response = self.process_exception_by_middleware(e, request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:113: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+yatube/posts/views.py:71: in post_detail
+    return render(request, 'posts/post_detail.html', context)
+venv/lib/python3.8/site-packages/django/shortcuts.py:36: in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+venv/lib/python3.8/site-packages/django/template/loader.py:62: in render_to_string
+    return template.render(context, request)
+venv/lib/python3.8/site-packages/django/template/backends/django.py:61: in render
+    return self.template.render(context)
+venv/lib/python3.8/site-packages/django/template/base.py:171: in render
+    return self._render(context)
+venv/lib/python3.8/site-packages/django/test/utils.py:96: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.8/site-packages/django/template/base.py:937: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.8/site-packages/django/template/base.py:904: in render_annotated
+    return self.render(context)
+venv/lib/python3.8/site-packages/django/template/loader_tags.py:150: in render
+    return compiled_parent._render(context)
+venv/lib/python3.8/site-packages/django/test/utils.py:96: in instrumented_test_render
+    return self.nodelist.render(context)
+venv/lib/python3.8/site-packages/django/template/base.py:937: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.8/site-packages/django/template/base.py:904: in render_annotated
+    return self.render(context)
+venv/lib/python3.8/site-packages/django/template/loader_tags.py:62: in render
+    result = block.nodelist.render(context)
+venv/lib/python3.8/site-packages/django/template/base.py:937: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.8/site-packages/django/template/base.py:904: in render_annotated
+    return self.render(context)
+venv/lib/python3.8/site-packages/django/template/defaulttags.py:309: in render
+    return nodelist.render(context)
+venv/lib/python3.8/site-packages/django/template/base.py:937: in render
+    bit = node.render_annotated(context)
+venv/lib/python3.8/site-packages/django/template/base.py:904: in render_annotated
+    return self.render(context)
+venv/lib/python3.8/site-packages/django/template/defaulttags.py:443: in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+venv/lib/python3.8/site-packages/django/urls/base.py:90: in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <URLResolver <module 'posts.urls' from '/Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/urls.py'> (posts:posts) ''>, lookup_view = 'group_list', _prefix = '/'
+args = ('test-link',), kwargs = {}, possibilities = []
+
+    def _reverse_with_prefix(self, lookup_view, _prefix, *args, **kwargs):
+        if args and kwargs:
+            raise ValueError("Don't mix *args and **kwargs in call to reverse()!")
+    
+        if not self._populated:
+            self._populate()
+    
+        possibilities = self.reverse_dict.getlist(lookup_view)
+    
+        for possibility, pattern, defaults, converters in possibilities:
+            for result, params in possibility:
+                if args:
+                    if len(args) != len(params):
+                        continue
+                    candidate_subs = dict(zip(params, args))
+                else:
+                    if set(kwargs).symmetric_difference(params).difference(defaults):
+                        continue
+                    if any(kwargs.get(k, v) != v for k, v in defaults.items()):
+                        continue
+                    candidate_subs = kwargs
+                # Convert the candidate subs to text using Converter.to_url().
+                text_candidate_subs = {}
+                for k, v in candidate_subs.items():
+                    if k in converters:
+                        text_candidate_subs[k] = converters[k].to_url(v)
+                    else:
+                        text_candidate_subs[k] = str(v)
+                # WSGI provides decoded URLs, without %xx escapes, and the URL
+                # resolver operates on such URLs. First substitute arguments
+                # without quoting to build a decoded URL and look for a match.
+                # Then, if we have a match, redo the substitution with quoted
+                # arguments in order to return a properly encoded URL.
+                candidate_pat = _prefix.replace('%', '%%') + result
+                if re.search('^%s%s' % (re.escape(_prefix), pattern), candidate_pat % text_candidate_subs):
+                    # safe characters from `pchar` definition of RFC 3986
+                    url = quote(candidate_pat % text_candidate_subs, safe=RFC3986_SUBDELIMS + '/~:@')
+                    # Don't allow construction of scheme relative urls.
+                    return escape_leading_slashes(url)
+        # lookup_view can be URL name or callable, but callables are not
+        # friendly in error messages.
+        m = getattr(lookup_view, '__module__', None)
+        n = getattr(lookup_view, '__name__', None)
+        if m is not None and n is not None:
+            lookup_view_s = "%s.%s" % (m, n)
+        else:
+            lookup_view_s = lookup_view
+    
+        patterns = [pattern for (_, pattern, _, _) in possibilities]
+        if patterns:
+            if args:
+                arg_msg = "arguments '%s'" % (args,)
+            elif kwargs:
+                arg_msg = "keyword arguments '%s'" % (kwargs,)
+            else:
+                arg_msg = "no arguments"
+            msg = (
+                "Reverse for '%s' with %s not found. %d pattern(s) tried: %s" %
+                (lookup_view_s, arg_msg, len(patterns), patterns)
+            )
+        else:
+            msg = (
+                "Reverse for '%(view)s' not found. '%(view)s' is not "
+                "a valid view function or pattern name." % {'view': lookup_view_s}
+            )
+>       raise NoReverseMatch(msg)
+E       django.urls.exceptions.NoReverseMatch: Reverse for 'group_list' not found. 'group_list' is not a valid view function or pattern name.
+
+venv/lib/python3.8/site-packages/django/urls/resolvers.py:673: NoReverseMatch
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+ERROR    django.request:log.py:222 Internal Server Error: /posts/4/
+Traceback (most recent call last):
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py", line 71, in post_detail
+    return render(request, 'posts/post_detail.html', context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/backends/django.py", line 61, in render
+    return self.template.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/test/utils.py", line 96, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 150, in render
+    return compiled_parent._render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/test/utils.py", line 96, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 309, in render
+    return nodelist.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 937, in render
+    bit = node.render_annotated(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/base.py", line 904, in render_annotated
+    return self.render(context)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/template/defaulttags.py", line 443, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/base.py", line 90, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 673, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'group_list' not found. 'group_list' is not a valid view function or pattern name.
+____________________________________________________________ TestPostEditView.test_post_edit_view_author_get ____________________________________________________________
+
+self = <tests.test_post.TestPostEditView object at 0x10ed6dcd0>, user_client = <django.test.client.Client object at 0x10eb663a0>
+post_with_group = <Post: Post object (6)>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_post_edit_view_author_get(self, user_client, post_with_group):
+        try:
+            response = user_client.get(f'/posts/{post_with_group.id}/edit')
+        except Exception as e:
+            assert False, f'''Страница `/posts/<post_id>/edit/` работает неправильно. Ошибка: `{e}`'''
+        if response.status_code in (301, 302):
+>           response = user_client.get(f'/posts/{post_with_group.id}/edit/')
+
+tests/test_post.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+venv/lib/python3.8/site-packages/django/test/client.py:535: in get
+    response = super().get(path, data=data, secure=secure, **extra)
+venv/lib/python3.8/site-packages/django/test/client.py:345: in get
+    return self.generic('GET', path, secure=secure, **{
+venv/lib/python3.8/site-packages/django/test/client.py:422: in generic
+    return self.request(**r)
+venv/lib/python3.8/site-packages/django/test/client.py:503: in request
+    raise exc_value
+venv/lib/python3.8/site-packages/django/core/handlers/exception.py:34: in inner
+    response = get_response(request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:115: in _get_response
+    response = self.process_exception_by_middleware(e, request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:113: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.8/site-packages/django/contrib/auth/decorators.py:21: in _wrapped_view
+    return view_func(request, *args, **kwargs)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+request = <WSGIRequest: GET '/posts/6/edit/'>, post_id = 6
+
+    @login_required
+    def post_edit(request, post_id):
+        is_edit = True
+        post = get_object_or_404(Post, pk=post_id)
+        if request.method =='POST':
+            form = PostForm(request.POST, instance=post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = request.user
+                post.pub_date = datetime.now()
+                post.save()
+                return redirect('posts:post_detail', id=post_id)
+            else:
+                groups = Group.objects.all()
+                form = PostForm(instance=post)
+            context = {
+                'form': form,
+                'groups': groups,
+                'is_edit': is_edit,
+            }
+>       return render(request, 'posts/create_post.html', context)
+E       UnboundLocalError: local variable 'context' referenced before assignment
+
+yatube/posts/views.py:115: UnboundLocalError
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+ERROR    django.request:log.py:222 Internal Server Error: /posts/6/edit/
+Traceback (most recent call last):
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/contrib/auth/decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py", line 115, in post_edit
+    return render(request, 'posts/create_post.html', context)
+UnboundLocalError: local variable 'context' referenced before assignment
+___________________________________________________________ TestPostEditView.test_post_edit_view_author_post ____________________________________________________________
+
+self = <tests.test_post.TestPostEditView object at 0x10eab3f40>, user_client = <django.test.client.Client object at 0x10ea4ba00>
+post_with_group = <Post: Post object (7)>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_post_edit_view_author_post(self, user_client, post_with_group):
+        text = 'Проверка изменения поста!'
+        try:
+            response = user_client.get(f'/posts/{post_with_group.id}/edit')
+        except Exception as e:
+            assert False, f'''Страница `/posts/<post_id>/edit/` работает неправильно. Ошибка: `{e}`'''
+        url = (
+            f'/posts/{post_with_group.id}/edit/'
+            if response.status_code in (301, 302)
+            else f'/posts/{post_with_group.id}/edit'
+        )
+    
+>       response = user_client.post(url, data={'text': text, 'group': post_with_group.group_id})
+
+tests/test_post.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+venv/lib/python3.8/site-packages/django/test/client.py:543: in post
+    response = super().post(path, data=data, content_type=content_type, secure=secure, **extra)
+venv/lib/python3.8/site-packages/django/test/client.py:356: in post
+    return self.generic('POST', path, post_data, content_type,
+venv/lib/python3.8/site-packages/django/test/client.py:422: in generic
+    return self.request(**r)
+venv/lib/python3.8/site-packages/django/test/client.py:503: in request
+    raise exc_value
+venv/lib/python3.8/site-packages/django/core/handlers/exception.py:34: in inner
+    response = get_response(request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:115: in _get_response
+    response = self.process_exception_by_middleware(e, request)
+venv/lib/python3.8/site-packages/django/core/handlers/base.py:113: in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+venv/lib/python3.8/site-packages/django/contrib/auth/decorators.py:21: in _wrapped_view
+    return view_func(request, *args, **kwargs)
+yatube/posts/views.py:106: in post_edit
+    return redirect('posts:post_detail', id=post_id)
+venv/lib/python3.8/site-packages/django/shortcuts.py:58: in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+venv/lib/python3.8/site-packages/django/shortcuts.py:148: in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+venv/lib/python3.8/site-packages/django/urls/base.py:90: in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <URLResolver <module 'posts.urls' from '/Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/urls.py'> (posts:posts) ''>, lookup_view = 'post_detail'
+_prefix = '/', args = (), kwargs = {'id': 7}
+possibilities = [([('posts/%(post_id)s/', ['post_id'])], 'posts/(?P<post_id>[0-9]+)/$', {}, {'post_id': <django.urls.converters.IntConverter object at 0x10d561760>})]
+possibility = [('posts/%(post_id)s/', ['post_id'])], pattern = 'posts/(?P<post_id>[0-9]+)/$', defaults = {}
+converters = {'post_id': <django.urls.converters.IntConverter object at 0x10d561760>}, result = 'posts/%(post_id)s/', params = ['post_id']
+
+    def _reverse_with_prefix(self, lookup_view, _prefix, *args, **kwargs):
+        if args and kwargs:
+            raise ValueError("Don't mix *args and **kwargs in call to reverse()!")
+    
+        if not self._populated:
+            self._populate()
+    
+        possibilities = self.reverse_dict.getlist(lookup_view)
+    
+        for possibility, pattern, defaults, converters in possibilities:
+            for result, params in possibility:
+                if args:
+                    if len(args) != len(params):
+                        continue
+                    candidate_subs = dict(zip(params, args))
+                else:
+                    if set(kwargs).symmetric_difference(params).difference(defaults):
+                        continue
+                    if any(kwargs.get(k, v) != v for k, v in defaults.items()):
+                        continue
+                    candidate_subs = kwargs
+                # Convert the candidate subs to text using Converter.to_url().
+                text_candidate_subs = {}
+                for k, v in candidate_subs.items():
+                    if k in converters:
+                        text_candidate_subs[k] = converters[k].to_url(v)
+                    else:
+                        text_candidate_subs[k] = str(v)
+                # WSGI provides decoded URLs, without %xx escapes, and the URL
+                # resolver operates on such URLs. First substitute arguments
+                # without quoting to build a decoded URL and look for a match.
+                # Then, if we have a match, redo the substitution with quoted
+                # arguments in order to return a properly encoded URL.
+                candidate_pat = _prefix.replace('%', '%%') + result
+                if re.search('^%s%s' % (re.escape(_prefix), pattern), candidate_pat % text_candidate_subs):
+                    # safe characters from `pchar` definition of RFC 3986
+                    url = quote(candidate_pat % text_candidate_subs, safe=RFC3986_SUBDELIMS + '/~:@')
+                    # Don't allow construction of scheme relative urls.
+                    return escape_leading_slashes(url)
+        # lookup_view can be URL name or callable, but callables are not
+        # friendly in error messages.
+        m = getattr(lookup_view, '__module__', None)
+        n = getattr(lookup_view, '__name__', None)
+        if m is not None and n is not None:
+            lookup_view_s = "%s.%s" % (m, n)
+        else:
+            lookup_view_s = lookup_view
+    
+        patterns = [pattern for (_, pattern, _, _) in possibilities]
+        if patterns:
+            if args:
+                arg_msg = "arguments '%s'" % (args,)
+            elif kwargs:
+                arg_msg = "keyword arguments '%s'" % (kwargs,)
+            else:
+                arg_msg = "no arguments"
+            msg = (
+                "Reverse for '%s' with %s not found. %d pattern(s) tried: %s" %
+                (lookup_view_s, arg_msg, len(patterns), patterns)
+            )
+        else:
+            msg = (
+                "Reverse for '%(view)s' not found. '%(view)s' is not "
+                "a valid view function or pattern name." % {'view': lookup_view_s}
+            )
+>       raise NoReverseMatch(msg)
+E       django.urls.exceptions.NoReverseMatch: Reverse for 'post_detail' with keyword arguments '{'id': 7}' not found. 1 pattern(s) tried: ['posts/(?P<post_id>[0-9]+)/$']
+
+venv/lib/python3.8/site-packages/django/urls/resolvers.py:673: NoReverseMatch
+--------------------------------------------------------------------------- Captured log call ---------------------------------------------------------------------------
+ERROR    django.request:log.py:222 Internal Server Error: /posts/7/edit/
+Traceback (most recent call last):
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/contrib/auth/decorators.py", line 21, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py", line 106, in post_edit
+    return redirect('posts:post_detail', id=post_id)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/shortcuts.py", line 58, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/shortcuts.py", line 148, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/base.py", line 90, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/urls/resolvers.py", line 673, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'post_detail' with keyword arguments '{'id': 7}' not found. 1 pattern(s) tried: ['posts/(?P<post_id>[0-9]+)/$']
+_________________________________________________________________ TestProfileView.test_profile_view_get _________________________________________________________________
+
+self = <tests.test_profile.TestProfileView object at 0x10ea4fa60>, client = <django.test.client.Client object at 0x10ec829d0>, post_with_group = <Post: Post object (8)>
+
+    @pytest.mark.django_db(transaction=True)
+    def test_profile_view_get(self, client, post_with_group):
+        try:
+            response = client.get(f'/profile/{post_with_group.author.username}')
+        except Exception as e:
+            assert False, f'''Страница `/profile/<username>/` работает неправильно. Ошибка: `{e}`'''
+        if response.status_code in (301, 302):
+            response = client.get(f'/profile/{post_with_group.author.username}/')
+        assert response.status_code != 404, (
+            'Страница `/profile/<username>/` не найдена, проверьте этот адрес в *urls.py*'
+        )
+    
+        profile_context = get_field_from_context(response.context, get_user_model())
+>       assert profile_context is not None, 'Проверьте, что передали автора в контекст страницы `/profile/<username>/`'
+E       AssertionError: Проверьте, что передали автора в контекст страницы `/profile/<username>/`
+E       assert None is not None
+
+tests/test_profile.py:23: AssertionError
+=========================================================================== warnings summary ============================================================================
+tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_view_get
+tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_not_in_context_view
+tests/test_homework.py::TestGroupView::test_group_view
+  /Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py:30: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'posts.models.Post'> QuerySet.
+    paginator = Paginator(posts, 10)
+
+tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_not_in_view_context
+tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_view
+  /Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py:13: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'posts.models.Post'> QuerySet.
+    paginator = Paginator(posts, 10)
+
+tests/test_paginator.py::TestGroupPaginatorView::test_profile_paginator_view
+tests/test_profile.py::TestProfileView::test_profile_view_get
+  /Users/vaceslavmorgunov/Dev/hw03_forms/yatube/posts/views.py:43: UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list: <class 'posts.models.Post'> QuerySet.
+    paginator = Paginator(posts, 10)
+
+tests/test_post.py::TestPostEditView::test_post_edit_view_author_post
+  /Users/vaceslavmorgunov/Dev/hw03_forms/venv/lib/python3.8/site-packages/django/db/models/fields/__init__.py:1420: RuntimeWarning: DateTimeField Post.pub_date received a naive datetime (2022-01-22 17:44:35.117789) while time zone support is active.
+    warnings.warn("DateTimeField %s received a naive datetime (%s)"
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+=============================================================== 7 failed, 13 passed, 8 warnings in 7.39s ================================================================
+(venv) (base) MacBook-Pro-Vaceslav:hw03_forms vaceslavmorgunov$ 
