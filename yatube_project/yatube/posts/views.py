@@ -103,13 +103,13 @@ def post_edit(request, post_id):
             post.author = request.user
             post.pub_date = datetime.now()
             post.save()
-            return redirect('posts:post_detail', id=post_id)
+            return redirect('posts:post_detail', post_id=post_id)
         else:
-            groups = Group.objects.all()
             form = PostForm(instance=post)
-        context = {
-            'form': form,
-            'groups': groups,
-            'is_edit': is_edit,
-        }
+    groups = Group.objects.all()
+    context = {
+        'form': form,
+        'groups': groups,
+        'is_edit': is_edit,
+    }
     return render(request, 'posts/create_post.html', context)
